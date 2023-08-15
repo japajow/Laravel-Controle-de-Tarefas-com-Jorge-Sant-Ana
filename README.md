@@ -24,6 +24,15 @@ php artisan list
 npm install resolve-url-loader@^5.0.0 --save-dev --legacy-peer-deps
 
 
+## Configurando o banco de dados
+
+## Criando model e controller para a tarefa
+
+php artisan make:controller --resource TarefaController --model=Tarefa
+
+
+
+
 
 
 
