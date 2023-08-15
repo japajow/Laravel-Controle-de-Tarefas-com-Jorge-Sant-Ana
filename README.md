@@ -14,4 +14,16 @@ php --ini
 
 php artisan list
 
+## Ententendo o pacote UI
+ -- iniciando a autenticacao WEB nativa do laravel
+
+ php artisan ui bootstrap --auth // react ou Vue
+
+ npm install && npm run dev
+
+npm install resolve-url-loader@^5.0.0 --save-dev --legacy-peer-deps
+
+
+
+
 
