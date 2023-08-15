@@ -46,7 +46,36 @@ public function __construct()
     }
 ```
 
+## Verificando se o usuario esta logado dentro dos metodos Controller
 
+Temos duas formas de verificar se o usuario esta logado ou nao.
+
+```php
+
+auth()->check();
+```
+
+segunda forma e usando a classe
+
+```php
+
+Auth::check();
+```
+
+podemos pegar os dados do usuario
+
+```php
+auth()->user()->id;
+auth()->user()->name;
+auth()->user()->email;
+
+ou usando a classe
+
+Auth::user()->id;
+Auth::user()->name;
+Auth::user()->email;
+
+```
 
 
 

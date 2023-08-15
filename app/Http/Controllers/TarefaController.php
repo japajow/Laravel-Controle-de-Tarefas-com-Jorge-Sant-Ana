@@ -10,7 +10,7 @@ class TarefaController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+         $this->middleware('auth');
     }
     /**
      * Display a listing of the resource.
@@ -19,6 +19,12 @@ class TarefaController extends Controller
      */
     public function index()
     {
+        if(auth()->check()){
+            return 'Voce esta logado no sistema';
+        }else{
+            return 'Voce nao esta logado no sistema';
+        }
+
         return 'chegamos';
     }
 
