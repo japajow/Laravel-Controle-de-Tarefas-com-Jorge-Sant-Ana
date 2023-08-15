@@ -6,5 +6,12 @@
 
 # Laravel Controle de Tarefas com Laravel --
 
+# Instalando  o Laravel UI
+composer require laravel/ui:^3.2
+
+saber aonde o php.ini esta alocada na maquina
+php --ini
+
+php artisan list
 
 
