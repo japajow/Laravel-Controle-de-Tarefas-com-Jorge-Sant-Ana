@@ -30,6 +30,22 @@ npm install resolve-url-loader@^5.0.0 --save-dev --legacy-peer-deps
 
 php artisan make:controller --resource TarefaController --model=Tarefa
 
+## implementando a middleware auth
+
+Criando a rotas
+
+```php
+Route::resource('tarefa','App\Http\Controllers\TarefaController');
+```
+
+Incluindo a middleware no construtor tarefaController
+```php
+public function __construct()
+    {
+        $this->middleware('auth');
+    }
+```
+
 
 
 
