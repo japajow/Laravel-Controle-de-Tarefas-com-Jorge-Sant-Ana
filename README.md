@@ -76,6 +76,19 @@ Auth::user()->name;
 Auth::user()->email;
 
 ```
+## criando um template de e-mail markdown maiables
+
+php artisan make:mail <Nome da classe> <view associada a classe>
+php artisan make:mail MensagemTesteMail --markdown emails.mensagem-teste
+
+Vamos na rotas e incluir uma rota para testaer o email
+
+```php
+
+Route::get('/mensagem-teste', function(){
+    return new MensagemTesteMail();
+});
+```
 
 
 
