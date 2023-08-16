@@ -90,6 +90,23 @@ Route::get('/mensagem-teste', function(){
 });
 ```
 
+## Enviando emails
+
+```php
+ Mail::to('sitewnkcorporate@gmail.com')->send('new MensagemTesteMail()');
+ return 'E-mail enviado com sucesso!';
+```
+
+enviando email pelo tinker
+
+php artisan tinker
+use App\Mail\MensagemTesteMail;
+Mail::to('sitewnkcorporate@gmail.com')->send('new MensagemTesteMail()');
+
+
+
+
+
 
 
 
