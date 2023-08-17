@@ -109,8 +109,166 @@ php artisan vendor:publish
 14
 
 
+## Configurando o envio de e-mails (Reset Password)
+app/Models/User.php
+criamos uma funcao que intercepta o padrao de recuperacao de senha
+
+```php
+ public function sendPasswordResetNotification($token){
+        return 'chegamos ate aqui';
+    }
+
+```
+
+criamos um notification para manipular o template dele
+
+php artisan make:notification RedefinirSenhaNotification
+
+incluimos o notify() instaciamos a classe Notifications criada acima
+e passamos o token no parametro
+```php
+
+public function sendPasswordResetNotification($token){
+         $this->notify(new RedefinirSenhaNotification($token));
+    }
+```
+
+recuperamos o token na classe passando no metodo construtor
+criamos a variavel token
+
+```php
+
+public $token;
+
+  public function __construct($token)
+    {
+        $this->token = $token;
+    }
+
+```
+Copiamos as instrucoes
+
+```php
+
+return (new MailMessage)
+            ->subject(Lang::get('Reset Password Notification'))
+            ->line(Lang::get('You are receiving this email because we received a password reset request for your account.'))
+            ->action(Lang::get('Reset Password'), $url)
+            ->line(Lang::get('This password reset link will expire in :count minutes.', ['count' => config('auth.passwords.'.config('auth.defaults.passwords').'.expire')]))
+            ->line(Lang::get('If you did not request a password reset, no further action is required.'));
+
+```
+
+c colamos no  nosso RedefinirSenhaNotification
+
+trduzimos a mensagem
+```php
+       $url = 'ttp://localhost:8000/password/reset/'.$this->token;
+        $minutos = config('auth.passwords.'.config('auth.defaults.passwords').'.expire');
+
+        return (new MailMessage)
+            ->subject(Lang::get('Atualização de senha'))
+            ->line(Lang::get('Esqueceu a senha? Sem problemas, vamos resolver isso!!!'))
+            ->action(Lang::get('Clique aqui para modificar a senha'), $url)
+            ->line('Esse link vai expirar em : '.$minutos .' minutos.')
+            ->line(Lang::get('Caso voce nao tenha solicitado a alteração de  senha, entre em contato.'));
+    }
 
 
+```
+
+vamos passar o email no parametro para pegar o email
+User.php
+```php
+ public function sendPasswordResetNotification($token){
+         $this->notify(new RedefinirSenhaNotification($token),$this->email);
+    }
+
+```
+Criamos uma variavel
+e passamos no metodo construtor
+RedefinirSenhaNotification.php
+```php
+public $email;
+    /**
+     * Create a new notification instance.
+     *
+     * @return void
+     */
+    public function __construct($token,$email)
+    {
+        $this->token = $token;
+        $this->email = $email;
+    }
+
+```
+RedefinirSenhaNotification.php
+Vamos passar na mensagem o email recuperado
+```php
+     $url = "http://localhost:8000/password/reset/{$this->token}?email={$this->email}";
+
+```
+Adicionando o nome no parametro
+
+```php
+
+ public function sendPasswordResetNotification($token){
+
+         $this->notify(new RedefinirSenhaNotification($token,$this->email,$this->name));
+    }
+
+```
+
+passando no construtor
+
+```php
+    public $token;
+    public $email;
+    public $name;
+    /**
+     * Create a new notification instance.
+     *
+     * @return void
+     */
+    public function __construct($token,$email,$name)
+    {
+        $this->token = $token;
+        $this->email = $email;
+        $this->name = $name;
+    }
+
+```
+
+incluindo a saudacao
+
+```php
+  ->greeting("Ola {$this->name}")
+
+```
+
+saudacao final modificando
+
+```php
+->salutation('Ate breve!')
+
+```
+
+vendor/laravel/framework/src/illuminate/Notifications/resources/views/email.blade.php
+Modificando o footer do email padrao
+```php
+{{-- Subcopy --}}
+@isset($actionText)
+@slot('subcopy')
+@lang( "Caso você tenha problemas no botão acima, copie e cole a url abaixo.",
+    [
+        'actionText' => $actionText,
+    ]
+) <span class="break-all">[{{ $displayableActionUrl }}]({{ $actionUrl }})</span>
+@endslot
+@endisset
+@endcomponent
+
+```
 
 
 
