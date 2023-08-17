@@ -25,7 +25,7 @@ Route::resource('tarefa','App\Http\Controllers\TarefaController');
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::get('/mensagem-teste', function(){
-    Mail::to('laravel@pantube.site')->send(new MensagemTesteMail());
-    return 'E-mail enviado com sucesso!!';
-    // return new MensagemTesteMail()
+    // Mail::to('laravel@pantube.site')->send(new MensagemTesteMail());
+    // return 'E-mail enviado com sucesso!!';
+    return new MensagemTesteMail();
 });

@@ -103,6 +103,10 @@ php artisan tinker
 use App\Mail\MensagemTesteMail;
 Mail::to('sitewnkcorporate@gmail.com')->send('new MensagemTesteMail()');
 
+## Publicando e customizando o template do e-mail
+
+php artisan vendor:publish
+14
 
 
 
