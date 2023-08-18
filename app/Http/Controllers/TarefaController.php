@@ -45,13 +45,13 @@ class TarefaController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'tarefa' => 'required|min:3|max:20',
+            'tarefa' => 'required|min:3|max:60',
         ];
 
         $params = [
             'required' => 'Campo :attribute e obrigatorio',
             'tarefa.min' => 'minimo 3 caracteres',
-            'tarefa.max' => 'maximo 20 caracteres'
+            'tarefa.max' => 'maximo 60 caracteres'
         ];
 
         $request->validate($rules,$params);
@@ -86,7 +86,8 @@ class TarefaController extends Controller
      */
     public function edit(Tarefa $tarefa)
     {
-        return view('tarefas.edit');
+
+        return view('tarefa.edit',['tarefa' => $tarefa]);
     }
 
     /**
@@ -98,7 +99,20 @@ class TarefaController extends Controller
      */
     public function update(Request $request, Tarefa $tarefa)
     {
-        //
+        $rules = [
+            'tarefa' => 'required|min:3|max:60',
+        ];
+
+        $params = [
+            'required' => 'Campo :attribute e obrigatorio',
+            'tarefa.min' => 'minimo 3 caracteres',
+            'tarefa.max' => 'maximo 60 caracteres'
+        ];
+
+        $request->validate($rules,$params);
+
+        $tarefa->update($request->all());
+        return redirect()->route('tarefa.show',['tarefa'=>$tarefa]);
     }
 
     /**
