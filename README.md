@@ -912,5 +912,66 @@ No metod update inserimos os validates e o update
     }
 ```
 
+## Validando se a tarefa pertence ai usuario
+
+
+criando um blade na views direto
+acesso-negado.blade.php
+
+```html
+
+@extends('layouts.app')
+
+@section('content')
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">Acesso Negado</div>
+
+                <div class="card-body">
+                   <h3>Desculpe voce nao tem acesso a esse recurso</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
+
+```
+
+vamos na TarefaController
+pegamos o id do usuario atual e o id da tarefa e comparamos , verificamos se e dele a tarefa
+
+```php
+ public function edit(Tarefa $tarefa)
+    {
+        $user_id = auth()->user()->id;
+        $tarefa_id = $tarefa->user_id;
+
+        if($tarefa_id == $user_id){
+            return view('tarefa.edit',['tarefa' => $tarefa]);
+        }else{
+            return view('acesso-negado');
+        }
+    }
+
+```
+
+colocamos a verificacao tambem no update
+
+```php
+
+
+        $user_id = auth()->user()->id;
+        $tarefa_id = $tarefa->user_id;
+        if($tarefa_id == $user_id){
+            $tarefa->update($request->all());
+            return redirect()->route('tarefa.show',['tarefa'=>$tarefa]);
+        }else{
+            return view('acesso-negado');
+        }
+
+```
 
 
