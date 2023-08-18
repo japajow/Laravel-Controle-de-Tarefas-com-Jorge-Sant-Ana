@@ -599,5 +599,79 @@ voltando para a pagina anterios
 
 {{ url()->previous()  }}
 
-##
+## Associando o usuario a tarefa
+
+php artisan make:migration alter_table_tarefas_relacionamentos_users
+
+migrations/alter_table_tarefas_relacionamentos_users
+
+```php
+
+ public function up()
+    {
+        Schema::table('tarefas', function(Blueprint $table){
+            $table->unsignedBigInteger('user_id')->nullable()->after('id');
+            $table->foreign('user_id')->references('id')->on('users');
+        });
+    }
+```
+
+```php
+
+ public function down()
+    {
+        Schema::table('tarefas', function(Blueprint $table){
+            $table->dropForeign('tarefas_user_id_foreign');
+            $table->dropColumn('users_id');
+        });
+    }
+```
+
+apos ter configurado a migration vamos executar
+
+php artisan migrate
+
+ajustando para cadastrar a coluna user_id TarefaController
+
+```php
+metodo store
+
+// criamos um array $dados = $request->all();
+// criamos um indice $dados['user_id'] = auth()->user()->id
+ $dados = $request->all();
+$dados['user_id'] = auth()->user()->id;
+$tarefa = Tarefa::create($dados);
+
+dd($dados);
+array:4 [▼
+  "_token" => "BQyqi1xnuD2JT08TFk3YRdBeHhNCup5vQ5tzMnKD"
+  "tarefa" => "Tarefa 60"
+  "data_limite_conclusao" => "2023-08-20"
+  "user_id" => 5
+]
+
+passamos as colunas que queremos pegar
+ $dados = $request->all(['tarefa','data_limite_conclusao']);
+       $dados['user_id'] = auth()->user()->id;
+       dd($dados);
+
+resposta
+array:3 [▼
+  "tarefa" => "Tarefa 60"
+  "data_limite_conclusao" => "2023-08-20"
+  "user_id" => 5
+]
+
+```
+Precisamos ir la no MOdels e passar a coluna user_id para ser registrado
+
+```php
+class Tarefa extends Model
+{
+    use HasFactory;
+
+    protected $fillable = ['tarefa','data_limite_conclusao','user_id'];
+}
+```
+
 
