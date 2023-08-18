@@ -821,3 +821,17 @@ configurando assim
 </ul>
 </nav>
 ```
+
+## Modificando a rota defualt Home para a Lista de Tarefas
+
+app/Providers/RoutesServiceProvider
+
+```php
+
+De
+  public const HOME = '/home';
+
+Para
+  public const HOME = '/tarefa';
+```
+

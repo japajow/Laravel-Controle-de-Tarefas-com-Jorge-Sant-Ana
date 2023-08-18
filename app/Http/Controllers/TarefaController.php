@@ -86,7 +86,7 @@ class TarefaController extends Controller
      */
     public function edit(Tarefa $tarefa)
     {
-        //
+        return view('tarefas.edit');
     }
 
     /**
