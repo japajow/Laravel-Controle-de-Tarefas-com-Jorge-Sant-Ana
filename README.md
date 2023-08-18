@@ -974,4 +974,37 @@ colocamos a verificacao tambem no update
 
 ```
 
+## removendo registro da tarefa
+
+ilcuindo no index um link excluir que remove a tarefa
+implementamos o formulario
+passando a tag id concatenada com id da tarefa
+method passamos post, mas passamos @method('DELETE')
+passamo o token @crsf
+passamos a action={{route('tarefa.destroy',['tarefa'=>$tarefa['id'])]}}
+```html
+ <td><form id="form-{{$tarefa['id']}}" action="{{ route('tarefa.destroy',$tarefa['id'])}}" method="post">
+    @csrf
+    @method('DELETE')
+</form>
+    <a href="#" onclick="document.getElementById('form-{{$tarefa['id']}}').submit()">Excluir</a></td>
+
+```
+
+no TarefaController no metodo destroy
+
+```php
+  public function destroy(Tarefa $tarefa)
+    {
+        $user_id = auth()->user()->id;
+        $tarefa_id = $tarefa->user_id;
+        if($tarefa_id == $user_id){
+            $tarefa->destroy($tarefa->id);
+            return redirect()->route('tarefa.index');
+        }else{
+            return view('acesso-negado');
+        }
+    }
+
+```
 
