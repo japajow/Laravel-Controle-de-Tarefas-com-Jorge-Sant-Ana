@@ -270,6 +270,190 @@ Modificando o footer do email padrao
 
 ```
 
+## Verificacao de email MustVerifyEmail
+User.php MustVerifyEmail
+implementamos na clsse
+```php
+class User extends Authenticatable implements MustVerifyEmail
+
+```
+
+em seguida no diretorio de routes/web.php
+
+adicionamos
+
+```php
+
+Auth::routes(['verify' => true]);
+
+```
+
+Adicionando o middleware para somente ter acesso ao verificar a cont pelo email
+
+```php
+->middleware('verified')
+
+```
+
+## Customizando a view de verificacao
+
+resources/view/auth/verify.blade.php
+
+```php
+
+
+```
+
+## Cadastrando novas tarefas
+
+Criamos a view e chamamos no controler TarefaController.php
+create()
+
+```php
+
+ public function create()
+    {
+        return view('tarefa.create');
+    }
+```
+
+criamos  resource/views/tarefa/create.blade.php
+copiamos o conteudo Home.balde.php
+```html
+@extends('layouts.app')
+
+@section('content')
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">{{ __('Dashboard') }}</div>
+
+                <div class="card-body">
+                    @if (session('status'))
+                        <div class="alert alert-success" role="alert">
+                            {{ session('status') }}
+                        </div>
+                    @endif
+
+                    {{ __('You are logged in!') }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
+
+
+```
+
+no card body colamos o codigo
+
+```html
+
+@extends('layouts.app')
+
+@section('content')
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">Adicionar Tarefa</div>
+
+                    <div class="card-body">
+                        <form method="post" action="{{ route('tarefa.store') }}">
+                            @csrf
+                            <div class="mb-3">
+                                <label for="tarefa" class="form-label">Tarefa</label>
+                                <input type="text" class="form-control" name="tarefa">
+                            </div>
+                            <div class="mb-3">
+                                <label for="data" class="form-label">Data limite conclusao</label>
+                                <input type="date" class="form-control" name="data_limite_conclusao">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Cadastrar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
+
+```
+
+vamos no controller e no metodo store fazer um teste
+
+```php
+ public function store(Request $request)
+    {
+        dd($request->all());
+    }
+
+```
+
+implemtentando um tabela
+
+php artisan make:migration create_tarefas_table
+
+```php
+
+ public function up()
+    {
+        Schema::create('tarefas', function (Blueprint $table) {
+            $table->id();
+            $table->string('tarefas',200);
+            $table->date('data_limite_conclusao');
+            $table->timestamps();
+        });
+    }
+```
+
+vamos executar a migrate
+php artisan migrate
+
+vamos armazenar os dados no TarefaCOntroller
+     vamos chamar a classe Tarefa::create($request->all());
+```php
+
+ $rules = [
+            'tarefa' => 'required|min:3|max:20',
+        ];
+
+        $params = [
+            'required' => 'Campo :attribute e obrigatorio',
+            'tarefa.min' => 'minimo 3 caracteres',
+            'tarefa.max' => 'maximo 20 caracteres'
+        ];
+
+        $request->validate($rules,$params);
+
+        Tarefa::create($request->all());
+```
+
+Vamos no Models e incluir as colunas para ser insertada no banco de dados
+
+```php
+protected $fillable = ['tarefa','data_limite_conclusao'];
+
+```
+
+passamos a criacao para uma variavel
+
+```php
+$tarefa =  Tarefa::create($request->all());
+
+```
+
+redirecionamos a tarefa para o metodo show com o id
+
+```php
+
+ return redirect()->route('tarefa.show',['tarefa'=>$tarefa->id]);
+```
+
+e no metodo show pegamos o atributo da tarefa que veio pelo store
+
 
 
 

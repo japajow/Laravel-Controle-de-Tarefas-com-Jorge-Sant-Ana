@@ -35,7 +35,7 @@ class TarefaController extends Controller
      */
     public function create()
     {
-        //
+        return view('tarefa.create');
     }
 
     /**
@@ -46,7 +46,21 @@ class TarefaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $rules = [
+            'tarefa' => 'required|min:3|max:20',
+        ];
+
+        $params = [
+            'required' => 'Campo :attribute e obrigatorio',
+            'tarefa.min' => 'minimo 3 caracteres',
+            'tarefa.max' => 'maximo 20 caracteres'
+        ];
+
+        $request->validate($rules,$params);
+
+       $tarefa = Tarefa::create($request->all());
+
+        return redirect()->route('tarefa.show',['tarefa'=>$tarefa->id]);
     }
 
     /**
@@ -55,9 +69,9 @@ class TarefaController extends Controller
      * @param  \App\Models\Tarefa  $tarefa
      * @return \Illuminate\Http\Response
      */
-    public function show(Tarefa $tarefa)
+    public function show(Request $request ,Tarefa $tarefa)
     {
-        //
+        dd($tarefa->getAttributes());
     }
 
     /**

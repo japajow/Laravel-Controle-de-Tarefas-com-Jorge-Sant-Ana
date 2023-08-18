@@ -1,6 +1,7 @@
 <?php
 
 use App\Mail\MensagemTesteMail;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
@@ -19,10 +20,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Auth::routes();
-Route::resource('tarefa','App\Http\Controllers\TarefaController');
+Auth::routes(['verify' => true]);
+Route::resource('tarefa','App\Http\Controllers\TarefaController')->middleware('verified');
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home')->middleware('verified');
 
 Route::get('/mensagem-teste', function(){
     Mail::to('laravel@pantube.site')->send(new MensagemTesteMail());
