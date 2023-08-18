@@ -5,7 +5,7 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header">Tarefas</div>
+                    <h3 class="card-header">Tarefas</h3>
 
                     <div class="card-body">
                         <table class="table">
@@ -28,6 +28,18 @@
                               @endforeach
                             </tbody>
                           </table>
+                          <div class="d-flex justify-content-center align-items-center">
+                            <nav aria-label="Page navigation example">
+                                <ul class="pagination">
+                                  <li class="page-item"><a class="page-link" href="{{ $tarefas->previousPageUrl() }}">Voltar</a></li>
+                                    @for ($i=1;$i<=$tarefas->lastPage(); $i++)
+                                    <li class="page-item"><a class="page-link {{ ($tarefas->currentPage() == $i)? 'active' : ''}}" href="{{ $tarefas->url($i) }}">{{ $i }}</a></li>
+                                    @endfor
+
+                                  <li class="page-item"><a class="page-link" href="{{ $tarefas->nextPageUrl() }}">Proximo</a></li>
+                                </ul>
+                              </nav>
+                          </div>
                     </div>
                 </div>
             </div>

@@ -773,5 +773,51 @@ passando na views as tarefas
 
 ```
 
+## implemanetando a paginacao de registros de tarefas
+
+TarefaController
+modificamos de get para paginate
+```php
+ public function index()
+    {
+        $user_id = auth()->user()->id;
+        $tarefas = Tarefa::where('user_id', $user_id)->paginate(1);
+        return view('tarefa.index',['tarefas'=>$tarefas]);
+    }
+
+```
+
+na view index mostramos o links
+
+```html
+ <span>{{ $tarefas->links() }}</span>
+```
+
+o css esta quebrado vamos criar do zero as configuracao da paginacao
+
+```html
+
+<nav aria-label="Page navigation example">
+  <ul class="pagination">
+    <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+    <li class="page-item"><a class="page-link" href="#">1</a></li>
+    <li class="page-item"><a class="page-link" href="#">2</a></li>
+    <li class="page-item"><a class="page-link" href="#">3</a></li>
+    <li class="page-item"><a class="page-link" href="#">Next</a></li>
+  </ul>
+</nav>
 
 
+configurando assim
+
+<nav aria-label="Page navigation example">
+<ul class="pagination">
+    <li class="page-item"><a class="page-link" href="{{ $tarefas->previousPageUrl() }}">Voltar</a></li>
+    @for ($i=1;$i<=$tarefas->lastPage(); $i++)
+    <li class="page-item"><a class="page-link {{ ($tarefas->currentPage() == $i)? 'active' : ''}}" href="{{ $tarefas->url($i) }}">{{ $i }}</a></li>
+    @endfor
+
+    <li class="page-item"><a class="page-link" href="{{ $tarefas->nextPageUrl() }}">Proximo</a></li>
+</ul>
+</nav>
+```
