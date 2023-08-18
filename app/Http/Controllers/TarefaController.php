@@ -21,13 +21,9 @@ class TarefaController extends Controller
      */
     public function index()
     {
-        if(auth()->check()){
-            return 'Voce esta logado no sistema';
-        }else{
-            return 'Voce nao esta logado no sistema';
-        }
-
-        return 'chegamos';
+        $user_id = auth()->user()->id;
+        $tarefas = Tarefa::where('user_id', $user_id)->get();
+        return view('tarefa.index',['tarefas'=>$tarefas]);
     }
 
     /**
@@ -62,7 +58,7 @@ class TarefaController extends Controller
 
        $dados = $request->all(['tarefa','data_limite_conclusao']);
        $dados['user_id'] = auth()->user()->id;
-       
+
        $tarefa = Tarefa::create($dados);
 
        $destinatario = auth()->user()->email;
