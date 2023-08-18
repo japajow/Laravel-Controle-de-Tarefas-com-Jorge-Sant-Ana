@@ -454,6 +454,8 @@ redirecionamos a tarefa para o metodo show com o id
 
 e no metodo show pegamos o atributo da tarefa que veio pelo store
 
+## Enviando um e-mail de cadastro de nova tarefa e exibindo os dados da tarefa
+
 
 
 
