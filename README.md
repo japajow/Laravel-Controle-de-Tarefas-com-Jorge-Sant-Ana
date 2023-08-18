@@ -456,6 +456,148 @@ e no metodo show pegamos o atributo da tarefa que veio pelo store
 
 ## Enviando um e-mail de cadastro de nova tarefa e exibindo os dados da tarefa
 
+criando o classe do Mail
+
+php artisan make:mail NovaTarefaMail --markdown emails.nova-tarefa
 
 
+no TarefaController vamos no metodo store e incluir a classe Mail::to
+
+```php
+use App\Mail\NovaTarefaMail; // importamos
+    // pegando o email do usuario atual
+  $destinatario = auth()->user()->email;
+  Mail::to($destinatario)->send(new NovaTarefaMail()); // incluimos no store
+
+```
+
+passamos os dados da $tarefa na NovaTarefaMail($tarefa)
+
+```php
+  Mail::to($destinatario)->send(new NovaTarefaMail($tarefa));
+
+```
+
+Na classe NovaTarefaMail
+
+```php
+
+importamos a Tarefa
+use App\Models\Tarefa;
+
+incluimos no metodo construtor
+
+   public function __construct(Tarefa $tarefa)
+    {
+        //
+    }
+```
+
+la no markdown view do mail nova-tarefa vamos trabalhar com 3 parametros
+
+```markdown
+
+@component('mail::message')
+# {{ $tarefa }}
+
+Data limite de conclusao: {{ $data_limite_conclusao }}
+
+@component('mail::button', ['url' => $url])
+Clique aqui para ver a tarefa
+@endcomponent
+
+Att,<br>
+{{ config('app.name') }}
+@endcomponent
+
+```
+
+vamos crias as 3 variaveis  $tarefa,$url,$data_limite_conclusao
+NovaTarefaMail
+```php
+
+criamos as variaveis
+
+ public $tarefa;
+    public $data_limite_conclusao;
+    public $url;
+
+    pegamos os valores no metodo construtor
+
+      public function __construct(Tarefa $tarefa)
+    {
+        $this->tarefa = $tarefa->tarefa;
+        // $this->data_limite_conclusao = $tarefa->data_limite_conclusao;
+        // passando a data para dia/mes/ano
+        $this->data_limite_conclusao = date('d/m/Y', strtotime($tarefa->data_limite_conclusao));
+
+        $this->url = "http://localhost:8000/tarefa/{$tarefa->id}";
+    }
+```
+
+adicionamos o sbject no markdown view
+
+```php
+
+  /**
+     * Build the message.
+     *
+     * @return $this
+     */
+    public function build()
+    {
+        return $this->markdown('emails.nova-tarefa')->subject('Nova Tarefa criada');
+    }
+```
+
+no TarefaCOntroller vamos no metodo show e retornar a view
+
+```php
+ public function show(Tarefa $tarefa)
+    {
+        return view('tarefa.show',['tarefa' =>$tarefa]);
+    }
+
+```
+
+criando a view tarefa show
+
+views/tarefas/show.blade.php
+
+```html
+
+//copiamos do create.blade.php e modificamos
+
+@extends('layouts.app')
+
+@section('content')
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">{{ $tarefa->tarefa }}</div>
+                    <div class="card-body">
+                        <fieldset disabled="disabled">
+                            <div class="mb-3">
+                                <label for="data" class="form-label">Data limite conclusao</label>
+                                <input type="date" class="form-control" value="{{ $tarefa->data_limite_conclusao }}">
+                            </div>
+                        </fieldset>
+                        <a href="{{ url()->previous()  }}" class="btn btn-secondary">Voltar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
+
+
+
+
+```
+voltando para a pagina anterios
+
+{{ url()->previous()  }}
+
+##
 
