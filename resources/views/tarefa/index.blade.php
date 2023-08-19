@@ -7,10 +7,10 @@
                 <div class="card">
                     <div class="card-header">Tarefas
                        <div class="d-flex justify-content-between">
-                        <a href="{{ route('tarefa.create')}}" >Novo</a>
-                        <a href="{{ route('tarefa.exportacao',['extensao' => 'xlsx'])}}">XLSX</a>
-                        <a href="{{ route('tarefa.exportacao',['extensao' => 'csv'])}}">CSV</a>
-                        <a href="{{ route('tarefa.exportar')}}">PDF</a>
+                        <a href="{{ route('tarefa.create')}}" class="btn btn-sm btn-success">NOVO</a>
+                        <a href="{{ route('tarefa.exportacao',['extensao' => 'xlsx'])}}" class="btn btm-sm btn-primary">XLSX</a>
+                        <a href="{{ route('tarefa.exportacao',['extensao' => 'csv'])}}" class="btn btm-sm btn-primary">CSV</a>
+                        <a href="{{ route('tarefa.exportar')}}" target="_blank" class="btn btm-sm btn-primary">PDF</a>
                        </div>
                     </div>
 
@@ -21,7 +21,7 @@
                                 <th scope="col">ID</th>
                                 <th scope="col">Tarefa</th>
                                 <th scope="col">Data Limite conclusao</th>
-                                <th scope="col"></th>
+                                <th scope="col" colspan="2" class="text-center">Ações</th>
                               </tr>
                             </thead>
                             <tbody>
