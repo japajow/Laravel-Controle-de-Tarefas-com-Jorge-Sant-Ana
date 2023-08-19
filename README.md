@@ -1128,3 +1128,40 @@ public function exportacao(){
         return Excel::download(new TarefasExport,'lista_tarefas.xlsx');
     }
 ```
+
+## refatorando relacionamento entre Users e Tarefas
+
+relacionamentos 1 usuario  tem muitas tarefas
+
+no Models/User.php vamos adicionar o metodo tarefas
+
+```php
+
+ public function tarefas(){
+            //hasMany
+            return $this->hasMany('App\Models\Tarefa');
+    }
+
+```
+
+vamos no Models tarefa.php e implementar o metodo user()
+
+```php
+
+  public function user(){
+        return $this->belongsTo('App\Models\User');
+    }
+```
+
+vamos no Export/tarefasExport.php e incluimos
+
+```php
+
+ public function collection()
+    {
+        return auth()->user()->tarefas()->get();
+
+    }
+```
+
+
