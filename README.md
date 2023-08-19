@@ -1317,6 +1317,74 @@ Barryvdh\DomPDF\ServiceProvider::class,
 php artisan vendor:publish --provider="Barryvdh\DomPDF\ServiceProvider"
 
 
+## Exportando um arquivo no formato PDF
+
+incluindo o link PDF no index
+
+```html
+
+        <a href="{{ route('tarefa.exportar']}}">PDF</a>
+```
+
+Vamos no routes e incluir essa rota
+
+```php
+
+Route::get('tarefa/exportar', 'App\Http\Controllers\TarefaController@exportar')->name('tarefa.exportar');
+
+```
+
+passamos no metodo a classe PDF
+
+```php
+
+  public function exportar(){
+        $pdf = PDF::loadView('tarefa.pdf',[]);
+        return $pdf->download('lista_de_tarefas.pdf');
+    }
+```
+
+criamos a view no views/tarefa/pdf.blade.php
+
+```html
+<h2>Lista de tarefas</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Tarefa</th>
+            <th>Data limite concluido</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach ($tarefas as $key => $tarefa )
+            <tr>
+                <td>{{ $tarefa->id}}</td>
+                <td>{{ $tarefa->tarefa}}</td>
+                <td>{{ date('d/m/Y', strtotime($tarefa->data_limite_conclusao))}}</td>
+            </tr>
+        @endforeach
+    </tbody>
+</table>
+
+```
+
+passamos a tabela dentro da classe pdf
+
+```php
+ public function exportar(){
+    $tabelas = auth()->user()->tarefas()->get();
+        $pdf = PDF::loadView('tarefa.pdf',['tarefas'=>$tarefas]);
+        return $pdf->download('lista_de_tarefas.pdf');
+    }
+```
+
+## Adicionandio suporte UTF-8 estilos CSS e quebras de paginas nas Views de PDF
+
+
+
 
 
 
