@@ -1270,6 +1270,53 @@ config;excel.php
             'test_auto_detect'       => true,
         ],
 ```
+## manipulando os dados de linha po linha formatando a data
+TarefasExports
+incluimos mais uma classe WithMapping
+Metodo map
+com map conseguimos interceptar cada linha e modificamos os dados para ser apresentado diferente
+
+```php
+use Maatwebsite\Excel\Concerns\WithMapping;
+
+  public function map($linha):array{
+
+        return [
+            $linha->id,
+            $linha->tarefa,
+            $linha->data_limite_conclusao,
+        ];
+    }
+
+```
+
+mosificamos o titulo
+
+```php
+
+public function headings():array{
+        return ['ID' ,'Tarefa','Data Limite conclusao'];
+    }
+```
+
+modificamos a data
+
+```php
+  date('d/m/Y', strtotime($linha->data_limite_conclusao)),
+```
+
+## Laravel DOMPDF
+
+composer require barryvdh/laravel-dompdf=^0.9.0
+  'aliases' => [
+'PDF' => Barryvdh\DomPDF\Facade::class,
+
+  'providers' => [
+Barryvdh\DomPDF\ServiceProvider::class,
+
+php artisan vendor:publish --provider="Barryvdh\DomPDF\ServiceProvider"
+
+
 
 
 
