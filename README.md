@@ -1163,5 +1163,98 @@ vamos no Export/tarefasExport.php e incluimos
 
     }
 ```
+## Refatorando um arquivo no formato CSV com relacao as tarefas
+
+Criamos um novo link CSV
+
+```html
+
+<a href="{{ route('tarefa.exportacao')}}">CSV</a>
+
+```
+
+passamos um parametro extensao para passar ao COntroller
+
+```html
+<a href="{{ route('tarefa.exportacao',['extensao' => 'csv'])}}">CSV</a>
+```
+
+adicionamos o parametro no controller no metodo
+
+```php
+public function exportacao($extensao){
+
+    }
+
+```
+adicionamos na rota que vamos receber um parametro na url
+
+```php
+Route::get('tarefa/exportacao/{extensao}', 'App\Http\Controllers\TarefaController@exportacao')->name('tarefa.exportacao');
+
+
+
+```
+recuperamos o metodo concatenando
+
+```php
+public function exportacao($extensao){
+        return Excel::download(new TarefasExport,"lista_tarefas.{$extensao}");
+    }
+
+```
+
+## Exportando um arquivo no formato PDF
+
+composer require mpdf/mpdf=^8.0.10
+
+acessando excel.php
+
+pesquisamos por pdf
+
+'pdf' => Excel::MPDF
+
+incluimos o link e a rota
+
+```html
+<a href="{{ route('tarefa.exportacao',['extensao' => 'pdf'])}}">PDF</a>
+
+```
+
+trefaController
+
+```php
+public function exportacao($extensao){
+    if(in_array([$extensao, 'xlsx','csv','pdf']))
+        return Excel::download(new TarefasExport,"lista_tarefas.{$extensao}");
+    }
+    return redirect()->route('tarefa.index');
+
+```
+## definindo titulos na exportacao
+
+na classe tarefaExport
+
+incluimos uma interface WithHeadings
+
+```php
+use Maatwebsite\Excel\Concerns\WithHeadings;
+
+//implementamos a classe
+class TarefasExport implements FromCollection, WithHeadings{}
+
+//criamos um metodo
+
+public function headings(){
+    return ['cada indice desse array , pertence um titulo '];
+}
+
+//preenchemos ela
+public function headings():array{// declarando tipo de retorno
+        return ['ID','ID do usuario', 'Tarefa','Data Limite conclusao','Data Cadastro','Data Atualizada'];
+    }
+```
+
+
 
 

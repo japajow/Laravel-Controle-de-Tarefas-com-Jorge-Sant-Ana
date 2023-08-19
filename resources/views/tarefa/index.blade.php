@@ -8,7 +8,8 @@
                     <div class="card-header">Tarefas
                        <div class="d-flex justify-content-between">
                         <a href="{{ route('tarefa.create')}}" >Novo</a>
-                        <a href="{{ route('tarefa.exportacao')}}">Exportar XLSX</a>
+                        <a href="{{ route('tarefa.exportacao',['extensao' => 'xlsx'])}}">XLSX</a>
+                        <a href="{{ route('tarefa.exportacao',['extensao' => 'csv'])}}">CSV</a>
                        </div>
                     </div>
 
