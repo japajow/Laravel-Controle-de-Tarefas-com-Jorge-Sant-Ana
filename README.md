@@ -1008,3 +1008,22 @@ no TarefaController no metodo destroy
 
 ```
 
+## adicionando links da tarefa novo,lista
+
+no index.blade.php incluimos o link de criar a tarefa no titulo
+
+```html
+<h3 class="card-header">Tarefas </h3><a href="{{ route('tarefa.create')}}" class="float-right">Novo</a>
+
+```
+
+no app.blade.php incluimos a lista de tarefa link
+```html
+
+<li class="nav-item"><a href="{{ route('tarefa.index')}}">Tarefas</a></li>
+
+
+```
+
+## Verificando se o usuario esta logado
+
