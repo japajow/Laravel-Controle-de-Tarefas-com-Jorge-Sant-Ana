@@ -1027,3 +1027,62 @@ no app.blade.php incluimos a lista de tarefa link
 
 ## Verificando se o usuario esta logado
 
+routes/web.php
+criamos a view bem-vindo
+
+```php
+Route::get('/', function () {
+    return view('bem-vindo');
+});
+
+```
+```php
+
+
+@auth
+Tudo que tiver contido aqui so aparece se o usuario esta authenticado
+@endauth
+
+```
+
+recuperando attributes do usuario
+
+```php
+
+<p>ID{{ Auth::user()->id}}</p>
+<p>Name{{ Auth::user()->name}}</p>
+<p>Email{{ Auth::user()->email}}</p>
+```
+
+outra tag @guest e o oposto do auth
+
+```php
+@guest
+  todos usuarios visitantes , consegue visualizar o que esta aqui dentro
+  se tiver authenticado nao aparece
+@endguest
+
+```
+
+## instalando o pacote Laravel Excel
+
+composer require maatwebsite/excel=^3.1.0
+$ composer require maatwebsite/excel=^3.1.0 --ignore-platform-reqs
+
+config/app.php
+
+```php
+providers = [
+    Maatwebsite\Excel\ExcelServiceProvider::class
+];
+
+
+  'aliases' => [ 'Excel' => Masstwebsite\Escel\Facades\Excel::class];
+```
+
+publicando o arquivo de configuracao
+
+php artisan vendor:publish  --provider="Maatwebsite\Excel\ExcelServiceProvider" --tag=config
+
+
+
