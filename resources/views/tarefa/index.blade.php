@@ -5,7 +5,12 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header">Tarefas <a href="{{ route('tarefa.create')}}" class="d-flex justify-content-end align-items-center">Novo</a></div>
+                    <div class="card-header">Tarefas
+                       <div class="d-flex justify-content-between">
+                        <a href="{{ route('tarefa.create')}}" >Novo</a>
+                        <a href="{{ route('tarefa.exportacao')}}">Exportar XLSX</a>
+                       </div>
+                    </div>
 
                     <div class="card-body">
                         <table class="table">

@@ -1067,7 +1067,7 @@ outra tag @guest e o oposto do auth
 ## instalando o pacote Laravel Excel
 
 composer require maatwebsite/excel=^3.1.0
-$ composer require maatwebsite/excel=^3.1.0 --ignore-platform-reqs
+composer require maatwebsite/excel=^3.1.0 --ignore-platform-reqs
 
 config/app.php
 
@@ -1078,11 +1078,53 @@ providers = [
 
 
   'aliases' => [ 'Excel' => Masstwebsite\Escel\Facades\Excel::class];
-```
 
-publicando o arquivo de configuracao
+  publicando o arquivo de configuracao
 
 php artisan vendor:publish  --provider="Maatwebsite\Excel\ExcelServiceProvider" --tag=config
+```
 
 
 
+## Exportando um arquivo no formarto XSLX com a relacao de tarefas
+
+Criando uma classe de exportacao
+
+php make:export <Nome da classe>
+
+php artisan make:export TarefasExport -model=Tarefa
+
+preparando a rota e o metodo para chamar a classe
+
+routes/web.php
+```php
+Route::get('tarefa/exportacao', function(){
+    return 'chegamos ate aqui';
+});
+
+```
+
+
+incluindo o link de exportacao
+
+views/tarefa/index.blade.php
+
+```html
+ <a href="{{ route('tarefa.exportacao')}}">XLSX</a>
+ ```
+
+acrescentado o name na rota
+```php
+Route::get('tarefa/exportacao', function(){
+    return 'chegamos ate aqui';
+})->name('tarefa.exportacao');
+
+```
+
+adicionamos a classe no TarefasCOntroller
+
+```php
+public function exportacao(){
+        return Excel::download(new TarefasExport,'lista_tarefas.xlsx');
+    }
+```
