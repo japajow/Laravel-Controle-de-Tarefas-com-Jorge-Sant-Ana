@@ -1254,7 +1254,22 @@ public function headings():array{// declarando tipo de retorno
         return ['ID','ID do usuario', 'Tarefa','Data Limite conclusao','Data Cadastro','Data Atualizada'];
     }
 ```
+## Corrigindo caracteres especiais
 
+config;excel.php
+
+```php
+ 'csv'                    => [
+            'delimiter'              => ',',
+            'enclosure'              => '"',
+            'line_ending'            => PHP_EOL,
+            'use_bom'                => false, // passamos para true
+            'include_separator_line' => false,
+            'excel_compatibility'    => false,
+            'output_encoding'        => '',
+            'test_auto_detect'       => true,
+        ],
+```
 
 
 
